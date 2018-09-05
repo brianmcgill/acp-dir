@@ -15,7 +15,7 @@ body {
 
 .dot {
   stroke: null;
-  opacity: 0.2;
+  opacity: 0.1;
 }
 
 #chart {
@@ -66,7 +66,7 @@ body {
 var margin = {top: 40, right: 40, bottom: 40, left: 40},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
     width = dim - margin.left - margin.right,
-    height = dim - margin.top - margin.bottom;
+    height = dim/1.3 - margin.top - margin.bottom;
 
 var x = d3.scale.linear()
     .range([0, width]);
@@ -74,8 +74,7 @@ var x = d3.scale.linear()
 var y = d3.scale.linear()
     .range([height, 0]);
 
-var r = d3.scale.linear()
-    .range([7, 18]);
+//var r = d3.scale.linear().range([7, 18]);
 
 var color = d3.scale.ordinal()
       .range(['#FCB93A','#2E547A','#457A59','#82477F','#86563E','#ABBF48','#F08031','#1F8FBA','#EACD3F','#3A9C9B','#C44244','#3A2C70','#7A3842','#C43B82','#699246']);
@@ -110,12 +109,13 @@ d3.csv("acpdata.csv", function(error, data) {
 
   data.forEach(function(d) {
     d.type = +d.type;
+    d.typename == d.typename
     d.obesity = +d.obesity;
     d.uninsured = +d.uninsured;
   });
 
-  x.domain([0, 15]);
-  y.domain([0, 0.4]);
+  x.domain([0, 0.4]);
+  y.domain([0, 15]);
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
 
   svg.append("g")
@@ -127,7 +127,7 @@ d3.csv("acpdata.csv", function(error, data) {
       .attr("x", width)
       .attr("y", -6)
       .style("text-anchor", "end")
-      .text("label");
+      .text("Obesity Percentage");
 
   svg.append("g")
       .attr("class", "y axis")
@@ -138,15 +138,15 @@ d3.csv("acpdata.csv", function(error, data) {
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Obesity Percentage")
+      .text("")
 
   svg.selectAll(".dot")
       .data(data)
     .enter().append("circle")
       .attr("class", "dot")
-      .attr("r", 4)
-      .attr("cx", function(d) { return x(d.type); })
-      .attr("cy", function(d) { return y(d.uninsured); })
+      .attr("r", 6)
+      .attr("cx", function(d) { return x(d.uninsured); })
+      .attr("cy", function(d) { return y(d.type); })
       .style("fill", function(d) { return color(d.type); })
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
@@ -157,7 +157,7 @@ function resize() {
 
   var dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
   width = dim - margin.left - margin.right,
-  height = dim - margin.top - margin.bottom;
+  height = dim/1.3 - margin.top - margin.bottom;
 
   console.log(dim);
 
@@ -184,9 +184,9 @@ function resize() {
   r.range([dim / 90, dim / 35])
 
   svg.selectAll('.dot')
-    .attr("r", 4)
-    .attr("cx", function(d) { return x(d.type); })
-    .attr("cy", function(d) { return y(d.uninsured); })
+    .attr("r", 6)
+    .attr("cx", function(d) { return x(d.uninsured); })
+    .attr("cy", function(d) { return y(d.type); })
 }
 
 d3.select(window).on('resize', resize);
