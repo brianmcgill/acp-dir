@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css">
+
+<style>
+
+.barD {
+  fill: #00AEEF;
+}
+
+.barR {
+  fill: #ED1C24;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.center{
+  height: 40px; 
+  width: 300px;
+  display: block;
+  margin:0 auto;
+}
+
+
+</style>
+<body>
+
+
+  <div id="btncontainer" class="center">
+  <div class="btn-group" data-toggle="buttons-radio">
+      <button id="1971" class="btn btn-small btn-default active">1971</button>
+      <button id="1980" class="btn btn-small btn-default">1980</button>
+      <button id="1990" class="btn btn-small btn-default">1990</button>
+      <button id="2000" class="btn btn-small btn-default">2000</button>
+      <button id="2010" class="btn btn-small btn-default">2010</button>
+      <button id="2013" class="btn btn-small btn-default">2013</button>
+  </div>
+  </div>
+
+  <div id="containerR"></div>
+  <div id="containerD"></div>
+
+
+<script>
+
+var margin = {top: 10, right: 10, bottom: 30, left: 35},
+    width = parseInt(d3.select('#containerR').style('width'), 10),
+    width = width - margin.left - margin.right,
+    height = 230 - margin.top - margin.bottom,
+    percent = d3.format('%');
+
+var xScale = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var yScale = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    .ticks(10, "%");
+
+    d3.select(window).on('resize', resize); 
+
+function resize() {
+    // update width
+    width = parseInt(d3.select('#containerR').style('width'), 10);
+    width = width - margin.left - margin.right;
+
+    // resize the chart
+    yScale.range([0, width]);
+    d3.select(containerR.node().parentNode)
+        .style('height', (y.rangeExtent()[1] + margin.top + margin.bottom) + 'px')
+        .style('width', (width + margin.left + margin.right) + 'px');
+
+    containerR.selectAll('rect.background')
+        .attr('width', width);
+
+    containerR.selectAll('rect.percent')
+        .attr('width', function(d) { return yScale(d.percent); });
+
+    // update median ticks
+    var median = d3.median(containerR.selectAll('.bar').data(), 
+        function(d) { return d.percent; });
+
+    containerR.selectAll('line.median')
+        .attr('y1', yScale(median))
+        .attr('y2', yScale(median));
+
+
+    // update axes
+    containerR.select('.yScale.axis.top').call(yAxis.orient('left'));
+    containerR.select('.yScale.axis.bottom').call(yAxis.orient('right'));
+
+}
+
+var svg = d3.select("#containerR").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var svg2 = d3.select("#containerD").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+
+d3.csv("lcv2.csv", function(error, lcvData) {
+
+  xScale.domain(lcvData.map(function(d) { return d.bin; }));
+  yScale.domain([0, d3.max(lcvData, function(d) { return d.r2013; })]);
+
+  //GOP
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Percentage of GOP");
+
+  svg.selectAll("bar")
+      .data(lcvData)
+      .enter().append("rect")
+      .attr("class", "barR")
+      .attr("x", function(d) { return xScale(d.bin); })
+      .attr("width", xScale.rangeBand())
+      .attr("y", function(d) { return yScale(d.r1971); })
+      .attr("height", function(d) { return height - yScale(d.r1971); })
+
+  //Dems
+   svg2.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg2.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Percentage of Democrats");
+
+  svg2.selectAll("bar")
+      .data(lcvData)
+    .enter().append("rect")
+      .attr("class", "barD")
+      .attr("x", function(d) { return xScale(d.bin); })
+      .attr("width", xScale.rangeBand())
+      .attr("y", function(d) { return yScale(d.d1971); })
+      .attr("height", function(d) { return height - yScale(d.d1971); })
+
+  //buttons
+  $("#1971").click(function(e) {
+
+    svg.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.r1971); })
+      .attr("height", function(d) { return height - yScale(d.r1971); });
+
+    svg2.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.d1971); })
+      .attr("height", function(d) { return height - yScale(d.d1971); });
+
+  });
+
+  $("#1980").click(function(e) {
+
+    svg.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.r1980); })
+      .attr("height", function(d) { return height - yScale(d.r1980); });
+
+    svg2.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.d1980); })
+      .attr("height", function(d) { return height - yScale(d.d1980); });
+
+  });
+
+  $("#1990").click(function(e) {
+
+    svg.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.r1990); })
+      .attr("height", function(d) { return height - yScale(d.r1990); });
+
+    svg2.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.d1990); })
+      .attr("height", function(d) { return height - yScale(d.d1990); });
+
+  });
+
+  $("#2000").click(function(e) {
+
+    svg.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.r2000); })
+      .attr("height", function(d) { return height - yScale(d.r2000); });
+
+    svg2.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.d2000); })
+      .attr("height", function(d) { return height - yScale(d.d2000); });
+
+  });
+
+  $("#2010").click(function(e) {
+
+    svg.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.r2010); })
+      .attr("height", function(d) { return height - yScale(d.r2010); });
+
+    svg2.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.d2010); })
+      .attr("height", function(d) { return height - yScale(d.d2010); });
+
+  });
+
+  $("#2013").click(function(e) {
+
+    svg.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.r2013); })
+      .attr("height", function(d) { return height - yScale(d.r2013); });
+
+    svg2.selectAll("rect")
+      .transition()
+      .duration(1000)
+      .ease("elastic")
+      .attr("y", function(d) { return yScale(d.d2013); })
+      .attr("height", function(d) { return height - yScale(d.d2013); });
+
+  });
+
+});
+
+
+</script>
