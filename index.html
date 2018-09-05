@@ -1,22 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css">
-
 <style>
 
-.barD {
-  fill: #00AEEF;
-}
-
-.barR {
-  fill: #ED1C24;
-}
-
-.axis {
+body {
   font: 10px sans-serif;
 }
 
@@ -27,200 +13,187 @@
   shape-rendering: crispEdges;
 }
 
-.x.axis path {
-  display: none;
+.dot {
+  stroke: #000;
 }
 
-.center{
-  height: 40px; 
-  width: 300px;
-  display: block;
-  margin:0 auto;
+#chart {
+  width: 100%;
+  height: 100%;
+  min-width: 300px;
+  min-height: 300px;
+  position: absolute;
 }
 
+.d3-tip {
+  line-height: 1;
+  font: 14px sans-serif;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: rgb(185, 185, 185);
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
 
 </style>
 <body>
 
-
-  <div id="btncontainer" class="center">
-  <div class="btn-group" data-toggle="buttons-radio">
-      <button id="1971" class="btn btn-small btn-default active">1971</button>
-      <button id="1980" class="btn btn-small btn-default">1980</button>
-      <button id="1990" class="btn btn-small btn-default">1990</button>
-      <button id="2000" class="btn btn-small btn-default">2000</button>
-      <button id="2010" class="btn btn-small btn-default">2010</button>
-      <button id="2013" class="btn btn-small btn-default">2013</button>
-  </div>
-  </div>
-
-  <div id="container"></div>
-
-
+<svg id="chart"></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script>
 
-var margin = {top: 10, right: 10, bottom: 30, left: 35},
-    width = parseInt(d3.select('#container').style('width'), 10),
-    width = width - margin.left - margin.right,
-    height = 530 - margin.top - margin.bottom,
-    percent = d3.format('%');
+var margin = {top: 40, right: 40, bottom: 40, left: 40},
+    dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
+    width = dim - margin.left - margin.right,
+    height = dim - margin.top - margin.bottom;
 
-var xScale = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1);
+var x = d3.scale.linear()
+    .range([0, width]);
 
-var yScale = d3.scale.linear()
+var y = d3.scale.linear()
     .range([height, 0]);
 
+var r = d3.scale.linear()
+    .range([7, 18]);
+
+var color = d3.scale.ordinal()
+      .range(["#8c510a", "#dfc27d", "#35978f"]);
+
 var xAxis = d3.svg.axis()
-    .scale(xScale)
+    .scale(x)
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
-    .scale(yScale)
-    .orient("left")
-    .ticks(10, "%");
+    .scale(y)
+    .orient("left");
 
-    d3.select(window).on('resize', resize); 
-
-function resize() {
-    // update width
-    width = parseInt(d3.select('#container').style('width'), 10);
-    width = width - margin.left - margin.right;
-
-    // resize the chart
-    yScale.range([0, width]);
-    d3.select(container.node().parentNode)
-        .style('height', (y.rangeExtent()[1] + margin.top + margin.bottom) + 'px')
-        .style('width', (width + margin.left + margin.right) + 'px');
-
-    container.selectAll('rect.background')
-        .attr('width', width);
-
-    container.selectAll('rect.percent')
-        .attr('width', function(d) { return yScale(d.percent); });
-
-    // update median ticks
-    var median = d3.median(container.selectAll('.bar').data(), 
-        function(d) { return d.percent; });
-
-    container.selectAll('line.median')
-        .attr('y1', yScale(median))
-        .attr('y2', yScale(median));
-
-
-    // update axes
-    container.select('.yScale.axis.top').call(yAxis.orient('left'));
-    container.select('.yScale.axis.bottom').call(yAxis.orient('right'));
-
-}
-
-var svg = d3.select("#container").append("svg")
+var svg = d3.select("#chart")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-    .append("g")
+  .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var dollarFormatter = d3.format(",.0f")
 
+var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<div><span>Category:</span> <span style='color:white'>" + d.Category + "</span></div>" +
+              "<div><span>Sub-Category:</span> <span style='color:white'>" + d.SubCategory + "</span></div>" +
+             "<div><span>Total Cost:</span> <span style='color:white'>" + "$"+ dollarFormatter(d.TotalValue) + "</span></div>";
+    })
 
-d3.csv("lcv2.csv", function(error, lcvData) {
+svg.call(tip);
 
-  xScale.domain(lcvData.map(function(d) { return d.bin; }));
-  yScale.domain([0, d3.max(lcvData, function(d) { return d.r2013; })]);
+d3.csv("giniDummy.csv", function(error, data) {
+  if (error) throw error;
 
-  //GOP
+  var subset = data.filter(function(el){return el.Metric === 'Cost'});
+
+  subset.forEach(function(d) {
+    d.ProductConcentration = +d.ProductConcentration;
+    d.CustomerConcentration = +d.CustomerConcentration;
+    d.TotalValue = +d.TotalValue;
+  });
+
+  x.domain([0, 1]);
+  y.domain([0, 1]);
+  r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
+
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+      .call(xAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text("Product Concentration");
 
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
-      .append("text")
+    .append("text")
+      .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Percentage of GOP");
+      .text("Customer Concentration")
 
-  svg.selectAll("bar")
-      .data(lcvData)
-      .enter().append("rect")
-      .attr("class", "barR")
-      .attr("x", function(d) { return xScale(d.bin); })
-      .attr("width", xScale.rangeBand())
-      .attr("y", function(d) { return yScale(d.r1971); })
-      .attr("height", function(d) { return height - yScale(d.r1971); })
-
-
-  //buttons
-  $("#1971").click(function(e) {
-
-    svg.selectAll("rect")
-      .transition()
-      .duration(1000)
-      .ease("elastic")
-      .attr("y", function(d) { return yScale(d.r1971); })
-      .attr("height", function(d) { return height - yScale(d.r1971); });
-
-  });
-
-  $("#1980").click(function(e) {
-
-    svg.selectAll("rect")
-      .transition()
-      .duration(1000)
-      .ease("elastic")
-      .attr("y", function(d) { return yScale(d.r1980); })
-      .attr("height", function(d) { return height - yScale(d.r1980); });
-
-  });
-
-  $("#1990").click(function(e) {
-
-    svg.selectAll("rect")
-      .transition()
-      .duration(1000)
-      .ease("elastic")
-      .attr("y", function(d) { return yScale(d.r1990); })
-      .attr("height", function(d) { return height - yScale(d.r1990); });
-
-  });
-
-  $("#2000").click(function(e) {
-
-    svg.selectAll("rect")
-      .transition()
-      .duration(1000)
-      .ease("elastic")
-      .attr("y", function(d) { return yScale(d.r2000); })
-      .attr("height", function(d) { return height - yScale(d.r2000); });
-
-  });
-
-  $("#2010").click(function(e) {
-
-    svg.selectAll("rect")
-      .transition()
-      .duration(1000)
-      .ease("elastic")
-      .attr("y", function(d) { return yScale(d.r2010); })
-      .attr("height", function(d) { return height - yScale(d.r2010); });
-
-  });
-
-  $("#2013").click(function(e) {
-
-    svg.selectAll("rect")
-      .transition()
-      .duration(1000)
-      .ease("elastic")
-      .attr("y", function(d) { return yScale(d.r2013); })
-      .attr("height", function(d) { return height - yScale(d.r2013); });
-
-  });
+  svg.selectAll(".dot")
+      .data(subset)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("r", function(d) {return r(d.TotalValue)})
+      .attr("cx", function(d) { return x(d.ProductConcentration); })
+      .attr("cy", function(d) { return y(d.CustomerConcentration); })
+      .style("fill", function(d) { return color(d.Category); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
 
 });
 
+function resize() {
+
+  var dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
+  width = dim - margin.left - margin.right,
+  height = dim - margin.top - margin.bottom;
+
+  console.log(dim);
+
+  // Update the range of the scale with new width/height
+  x.range([0, width]);
+  y.range([height, 0]);
+
+  // Update the axis and text with the new scale
+  svg.select('.x.axis')
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+  svg.select('.x.axis').select('.label')
+      .attr("x",width);
+
+  svg.select('.y.axis')
+    .call(yAxis);
+
+  // Update the tick marks
+  xAxis.ticks(dim / 75);
+  yAxis.ticks(dim / 75);
+
+  // Update the circles
+  r.range([dim / 90, dim / 35])
+
+  svg.selectAll('.dot')
+    .attr("r", function(d) {return r(d.TotalValue)})
+    .attr("cx", function(d) { return x(d.ProductConcentration); })
+    .attr("cy", function(d) { return y(d.CustomerConcentration); })
+}
+
+d3.select(window).on('resize', resize);
+
+resize();
 
 </script>
