@@ -63,14 +63,14 @@ body {
 <script src="d3-tip.js"></script>
 <script>
 
-var margin = {top: 40, right: 40, bottom: 40, left: 40},
+var margin = {top: 40, right: 40, bottom: 40, left: 120},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
     width = dim - margin.left - margin.right,
     height = dim/1.3 - margin.top - margin.bottom;
 
 var x = d3.scaleLinear().rangeRound([0, width]);
 
-var y = d3.scaleLinear().rangeRound([height, 0]);
+var y = d3.scaleBand().rangeRound([height, 0]);
 
 //var r = d3.scale.linear().range([7, 18]);
 
@@ -104,13 +104,13 @@ d3.csv("acpdata.csv", function(error, data) {
 
   data.forEach(function(d) {
     d.type = +d.type;
-    d.typename == d.typename
+    d.typename = d.typename
     d.obesity = +d.obesity;
     d.uninsured = +d.uninsured;
   });
 
   x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
-  y.domain([0, 15]);
+  y.domain(data.map(function(d) { return d.typename; }));
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
 
   svg.append("g")
@@ -141,7 +141,7 @@ d3.csv("acpdata.csv", function(error, data) {
       .attr("class", "dot")
       .attr("r", 6)
       .attr("cx", function(d) { return x(d.uninsured); })
-      .attr("cy", function(d) { return y(d.type); })
+      .attr("cy", function(d) { return y(d.typename); })
       .style("fill", function(d) { return color(d.type); })
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
