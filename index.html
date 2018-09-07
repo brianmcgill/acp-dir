@@ -6,10 +6,17 @@ body {
   font: 10px sans-serif;
 }
 
-.axis path,
-.axis line {
+.axis path { stroke: none; }
+.y line {
   fill: none;
-  stroke: #000;
+  stroke: none;
+  shape-rendering: crispEdges;
+}
+
+.y text { transform: translateY(-2.5%); }
+.x line {
+  fill: none;
+  stroke: #999;
   shape-rendering: crispEdges;
 }
 
@@ -66,7 +73,7 @@ body {
 var margin = {top: 40, right: 40, bottom: 40, left: 120},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
     width = dim - margin.left - margin.right,
-    height = dim/1.3 - margin.top - margin.bottom;
+    height = dim - margin.top - margin.bottom;
 
 var x = d3.scaleLinear().rangeRound([0, width]);
 
@@ -152,7 +159,7 @@ function resize() {
 
   var dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
   width = dim - margin.left - margin.right,
-  height = dim/1.3 - margin.top - margin.bottom;
+  height = dim - margin.top - margin.bottom;
 
   console.log(dim);
 
@@ -181,7 +188,7 @@ function resize() {
   svg.selectAll('.dot')
     .attr("r", 6)
     .attr("cx", function(d) { return x(d.uninsured); })
-    .attr("cy", function(d) { return y(d.type); })
+    .attr("cy", function(d) { return y(d.typename); })
 }
 
 d3.select(window).on('resize', resize);
