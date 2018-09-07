@@ -13,7 +13,7 @@ body {
   shape-rendering: crispEdges;
 }
 
-.y text { transform: translateY(-1.7em); }
+.y text { transform: translateY(-2em); }
 .x line {
   fill: none;
   stroke: #999;
@@ -84,7 +84,7 @@ var y = d3.scaleBand().rangeRound([height, 0]);
 var color = d3.scaleOrdinal()
       .range(['#FCB93A','#2E547A','#457A59','#82477F','#86563E','#ABBF48','#F08031','#1F8FBA','#EACD3F','#3A9C9B','#C44244','#3A2C70','#7A3842','#C43B82','#699246']);
 
-var xAxis = d3.axisBottom(x);
+var xAxis = d3.axisBottom(x).tickFormat(d3.format(".0%"));
 
 var yAxis = d3.axisLeft(y);
 
@@ -99,7 +99,7 @@ var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<div><span style='color:white'>" + d.countyname + ", " + d.state + "</span></div>";
+      return "<div><span style='color:white'>" + d.countyname + ", " + d.state + "</span></div>" + "<div><span style='color:white'>Uninsured rate: " + Math.round( d.uninsured * 1000 )/10  + "%</span></div>";
    })
 
 svg.call(tip);
