@@ -63,9 +63,14 @@ body {
 }
 
 </style>
+
+
 <body>
 
 <svg id="chart"></svg>
+
+
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="d3-tip.js"></script>
 <script>
@@ -95,11 +100,15 @@ var svg = d3.select("#chart")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js
+function pctDecimal(num) {
+  return Math.round(num *1000)/10 +"%"
+}
+
 var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<div><span style='color:white'>" + d.countyname + ", " + d.state + "</span></div>" + "<div><span style='color:white'>Uninsured rate: " + Math.round( d.uninsured * 1000 )/10  + "%</span></div>";
+      return "<div><span style='color:white'>" + d.countyname + ", " + d.state + "</span></div>" + "<div><span style='color:white'>Uninsured rate: " + pctDecimal(d.uninsured);  + "</span></div>";
    })
 
 svg.call(tip);
