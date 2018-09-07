@@ -114,7 +114,7 @@ d3.csv("acpdata.csv", function(error, data) {
     d.uninsured = +d.uninsured;
   });
 
-  x.domain([0, 0.4]);
+  x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
   y.domain([0, 15]);
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
 
@@ -181,7 +181,7 @@ function resize() {
   yAxis.ticks(dim / 75);
 
   // Update the circles
-  r.range([dim / 90, dim / 35])
+  //r.range([dim / 90, dim / 35])
 
   svg.selectAll('.dot')
     .attr("r", 6)
