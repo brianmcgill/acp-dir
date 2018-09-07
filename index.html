@@ -13,7 +13,7 @@ body {
   shape-rendering: crispEdges;
 }
 
-.y text { transform: translateY(-2.5%); }
+.y text { transform: translateY(-1.7em); }
 .x line {
   fill: none;
   stroke: #999;
@@ -129,18 +129,11 @@ d3.csv("acpdata.csv", function(error, data) {
       .attr("x", width)
       .attr("y", -6)
       .style("text-anchor", "end")
-      .text("Obesity Percentage");
+      .text("Uninsured Percentage");
 
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
-    .append("text")
-      .attr("class", "label")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("")
 
   svg.selectAll(".dot")
       .data(data)
