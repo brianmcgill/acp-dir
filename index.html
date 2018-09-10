@@ -70,8 +70,8 @@ body {
 
 <svg id="chart"></svg>
  <div class="btn-group" data-toggle="buttons-radio">
-  <button id="btnUninsured"class="btn btn active">Uninsured Rate</button>
-  <button id="btnObesity" class="btn btn">Obesity Rate</button>
+  <button id="uninsured-btn"class="btn btn active">Uninsured Rate</button>
+  <button id="obesity-btn" class="btn btn">Obesity Rate</button>
 </div>
 
 <script src="libs/bootstrap.js" type="text/javascript"></script>
@@ -160,50 +160,33 @@ d3.csv("acpdata.csv", function(error, data) {
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
- //button and transitions
-  const delay = function(d, i) { return i * 0.2; };
+  //button transitions
+  function btnTrans(cat, xMax, circ) {
 
-  d3.select("#btnUninsured").on("click",function(e) {
+    d3.select("#" + cat + "-btn").on("click",function(e) {
 
-    x.domain([0, d3.max(data, function(d) { return d.uninsured; })]); 
-    xAxis = d3.axisBottom(x).tickFormat(d3.format(".0%")); 
+      x.domain([0, d3.max(data, xMax)]); 
+      xAxis = d3.axisBottom(x).tickFormat(d3.format(".0%")); 
 
-    svg.selectAll(".x.axis")
-      .transition()
-      .duration(1300)
-      .call(xAxis);
+      svg.selectAll(".x.axis")
+        .transition()
+        .duration(1300)
+        .call(xAxis);
 
-    circles.transition()
-      .duration(1300)
-      .delay(delay)
-      .ease(d3.easeElastic)
-      .attr("cx", function(d,i) {
-        return x(d.uninsured)
-      })
-      
-  });
+      const delay = function(d, i) { return i * 0.2; };
+      circles.transition()
+        .duration(1300)
+        .delay(delay)
+        .ease(d3.easeElastic)
+        .attr("cx", circ)   
 
-  d3.select("#btnObesity").on("click",function(e) {
+    });   
+  };
 
-    
-    x.domain([0, d3.max(data, function(d) { return d.obesity; })]); 
-    xAxis = d3.axisBottom(x).tickFormat(d3.format(".0%")); 
+  //call buttons
+  btnTrans("uninsured", function(d) { return d.uninsured; }, function(d) { return x(d.uninsured) });
+  btnTrans("obesity",  function(d) {return d.obesity; }, function(d) { return x(d.obesity) });
 
-    svg.selectAll(".x.axis")
-      .transition()
-      .duration(1300)
-      .call(xAxis);
-
-     circles.transition()
-      .duration(1300)
-      .delay(delay)
-      .ease(d3.easeElastic)
-      .attr("cx", function(d,i) {
-        return x(d.obesity)
-      })
-
-
-  });
 
 });
 
