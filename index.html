@@ -69,26 +69,44 @@ body {
 
 <body>
 
-
- <div class="btn-group" data-toggle="buttons-radio">
-  <button id="uninsured-btn"class="btn btn active">Uninsured Rate</button>
-  <button id="obesity-btn" class="btn btn">Obesity Rate</button>
-  <button id="death-btn" class="btn btn">Death Rate</button>
-  <button id="childpoverty-btn" class="btn btn">Child Poverty</button>
-  <button id="longcommute-btn" class="btn btn">Commute Time</button>
-  <button id="overdose-btn" class="btn btn">Overdoses</button>
-  <button id="income-btn" class="btn btn">Household Income</button>
-  <button id="nhwhite-btn" class="btn btn">NonHisp. White Pct.</button>
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Tutorials
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+      <li role="presentation" class="divider"></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+    </ul>
+  </div>
 </div>
+
+
+  <!--<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   test
+  </button>
+   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a id="uninsured-btn"class="dropdown-item">Uninsured Rate</button>
+      <a id="obesity-btn" class="dropdown-item">Obesity Rate</button>
+      <a id="death-btn" class="dropdown-item">Death Rate</button>
+      <a id="childpoverty-btn" class="dropdown-item">Child Poverty</button>
+      <a id="longcommute-btn" class="dropdown-item">Commute Time</button>
+      <a id="overdose-btn" class="dropdown-item">Overdoses</button>
+      <a id="income-btn" class="dropdown-item">Household Income</button>
+      <a id="nhwhite-btn" class="dropdown-item">NonHisp. White Pct.</button>
+    </div>
+</div>-->
 
 <svg id="chart"></svg>
 
-<script src="libs/bootstrap.js" type="text/javascript"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="d3-tip.js"></script>
 <script>
 
-var margin = {top: 20, right: 10, bottom: 40, left: 120},
+var margin = {top: 20, right: 30, bottom: 40, left: 120},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
     width = dim - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
