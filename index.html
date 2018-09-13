@@ -195,7 +195,7 @@ d3.csv("acpdata.csv", function(error, data) {
 
 function resize() {
 
-  var dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
+  var dim = Math.min(parseInt(d3.select("#chart").style("width"))),
   width = dim - margin.left - margin.right,
   height = 700 - margin.top - margin.bottom;
 
