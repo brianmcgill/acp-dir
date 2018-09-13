@@ -29,10 +29,10 @@ body {
 
 #chart {
   width: 100%;
-  height: 100%;
+  height: 700px;
   min-width: 300px;
   min-height: 300px;
-  position: absolute;
+  position: relative;
 }
 
 .d3-tip {
@@ -69,21 +69,23 @@ body {
 
 <body>
 
-<svg id="chart"></svg>
+
  <div class="btn-group" data-toggle="buttons-radio">
   <button id="uninsured-btn"class="btn btn active">Uninsured Rate</button>
   <button id="obesity-btn" class="btn btn">Obesity Rate</button>
 </div>
+
+<svg id="chart"></svg>
 
 <script src="libs/bootstrap.js" type="text/javascript"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="d3-tip.js"></script>
 <script>
 
-var margin = {top: 40, right: 40, bottom: 40, left: 120},
+var margin = {top: 20, right: 10, bottom: 40, left: 120},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
     width = dim - margin.left - margin.right,
-    height = dim - margin.top - margin.bottom;
+    height = 700 - margin.top - margin.bottom;
 
 var x = d3.scaleLinear().rangeRound([0, width]);
 
@@ -195,7 +197,7 @@ function resize() {
 
   var dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
   width = dim - margin.left - margin.right,
-  height = dim - margin.top - margin.bottom;
+  height = 700 - margin.top - margin.bottom;
 
   console.log(dim);
 
