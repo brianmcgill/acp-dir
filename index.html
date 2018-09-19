@@ -8,6 +8,12 @@ body {
   font: 10px sans-serif;
 }
 
+.hed { 
+  font-size: 20px; 
+  font-weight: 600;
+  color: #777;
+}
+
 .axis path { stroke: none; }
 .y line {
   fill: none;
@@ -84,23 +90,7 @@ body {
     </ul>
   </div>
 
-
-
-  <!--<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-   test
-  </button>
-   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a id="uninsured-btn"class="dropdown-item">Uninsured Rate</button>
-      <a id="obesity-btn" class="dropdown-item">Obesity Rate</button>
-      <a id="death-btn" class="dropdown-item">Death Rate</button>
-      <a id="childpoverty-btn" class="dropdown-item">Child Poverty</button>
-      <a id="longcommute-btn" class="dropdown-item">Commute Time</button>
-      <a id="overdose-btn" class="dropdown-item">Overdoses</button>
-      <a id="income-btn" class="dropdown-item">Household Income</button>
-      <a id="nhwhite-btn" class="dropdown-item">NonHisp. White Pct.</button>
-    </div>
-</div>-->
+ <h1 class="hed">Uninsured Rate</h1> 
 
 <svg id="chart"></svg>
 
@@ -142,7 +132,7 @@ var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<div><span style='color:white'>" + d.countyname + ", " + d.state + "</span></div>" + "<div><span style='color:white'>Uninsured rate: " + pctDecimal(d.uninsured);  + "</span></div>";
+      return "<div><span style='color:white'>" + d.countyname + ", " + d.state + "</span></div>";
    })
 
 svg.call(tip);
@@ -197,12 +187,14 @@ d3.csv("acpdata.csv", function(error, data) {
       .on('mouseout', tip.hide);
 
   //button transitions
-  function btnTrans(cat, xMax, circ) {
+  function btnTrans(hed, cat, xMax, circ) {
 
     d3.select("#" + cat + "-btn").on("click",function(e) {
 
+      d3.select(".hed").text(hed)
+
       x.domain([0, d3.max(data, xMax)]); 
-      xAxis = d3.axisBottom(x).tickFormat(d3.format(".0%")); 
+      xAxis = d3.axisBottom(x)//.tickFormat(d3.format(".0%")); 
 
       svg.selectAll(".x.axis")
         .transition()
@@ -220,14 +212,14 @@ d3.csv("acpdata.csv", function(error, data) {
   };
 
   //call buttons
-  btnTrans("uninsured", function(d) { return d.uninsured; }, function(d) { return x(d.uninsured) });
-  btnTrans("obesity",  function(d) {return d.obesity; }, function(d) { return x(d.obesity) });
-  btnTrans("death",  function(d) {return d.death; }, function(d) { return x(d.death) });
-  btnTrans("childpoverty",  function(d) {return d.childpoverty; }, function(d) { return x(d.childpoverty) });
-  btnTrans("longcommute",  function(d) {return d.longcommute; }, function(d) { return x(d.longcommute) });
-  btnTrans("overdose",  function(d) {return d.overdose; }, function(d) { return x(d.overdose) });
-  btnTrans("income",  function(d) {return d.income; }, function(d) { return x(d.income) });
-  btnTrans("nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
+  btnTrans("Uninsured Rate", "uninsured", function(d) { return d.uninsured; }, function(d) { return x(d.uninsured) });
+  btnTrans("Obesity Rate","obesity",  function(d) {return d.obesity; }, function(d) { return x(d.obesity) });
+  btnTrans("Premature Deaths per 100,000 People","death",  function(d) {return d.death; }, function(d) { return x(d.death) });
+  btnTrans("Pct. Children in Poverty","childpoverty",  function(d) {return d.childpoverty; }, function(d) { return x(d.childpoverty) });
+  btnTrans("Pct. with a Long Commute","longcommute",  function(d) {return d.longcommute; }, function(d) { return x(d.longcommute) });
+  btnTrans("Drug Overdose Deaths per xxx People","overdose",  function(d) {return d.overdose; }, function(d) { return x(d.overdose) });
+  btnTrans("Median Household Income ($)","income",  function(d) {return d.income; }, function(d) { return x(d.income) });
+  btnTrans("Pct. Non-Hispanic White","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
 
 
 });
