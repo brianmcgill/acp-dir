@@ -81,10 +81,10 @@ body {
     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
       <li id="uninsured-btn" role="presentation"><a role="menuitem">Uninsured Rate</a></li>
       <li id="obesity-btn" role="presentation"><a role="menuitem" >Obesity Rate</a></li>
-      <li id="death-btn" role="presentation"><a role="menuitem" >Death Rate</a></li>
+      <li id="death-btn" role="presentation"><a role="menuitem" >Premature Death Rate</a></li>
       <li id="childpoverty-btn" role="presentation"><a role="menuitem" >Child Poverty</a></li>
-      <li id="longcommute-btn" role="presentation"><a role="menuitem">Commute Time</a></li>
-      <li id="overdose-btn" role="presentation"><a role="menuitem" >Overdoses per 1,000</a></li>
+      <li id="longcommute-btn" role="presentation"><a role="menuitem">Long Commutes</a></li>
+      <li id="overdose-btn" role="presentation"><a role="menuitem" >Drug Overdoses</a></li>
       <li id="income-btn" role="presentation"><a role="menuitem" >Median Household Income</a></li>
       <li id="nhwhite-btn" role="presentation"><a role="menuitem" >Pct. Non-Hisp. White</a></li>
     </ul>
@@ -111,9 +111,9 @@ var y = d3.scaleBand().rangeRound([height, 0]);
 //var r = d3.scale.linear().range([7, 18]);
 
 var color = d3.scaleOrdinal()
-      .range(['#FCB93A','#2E547A','#457A59','#82477F','#86563E','#ABBF48','#F08031','#1F8FBA','#EACD3F','#3A9C9B','#C44244','#3A2C70','#7A3842','#C43B82','#699246']);
+      .range(['#699246','#C43B82','#7A3842','#3A2C70','#C44244','#3A9C9B','#EACD3F','#1F8FBA','#F08031','#ABBF48','#86563E','#82477F','#457A59','#2E547A','#FCB93A']);
 
-var xAxis = d3.axisBottom(x).tickFormat(d3.format(".0%"));
+var xAxis = d3.axisBottom(x)//.tickFormat(d3.format(".0%"));
 
 var yAxis = d3.axisLeft(y);
 
@@ -182,7 +182,7 @@ d3.csv("acpdata.csv", function(error, data) {
       .attr("r", 6)
       .attr("cx", function(d) { return x(d.uninsured); })
       .attr("cy", function(d) { return y(d.typename); })
-      .style("fill", function(d) { return color(d.type); })
+      .style("fill", function(d) {return color(d.type); })
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
@@ -215,11 +215,11 @@ d3.csv("acpdata.csv", function(error, data) {
   btnTrans("Uninsured Rate", "uninsured", function(d) { return d.uninsured; }, function(d) { return x(d.uninsured) });
   btnTrans("Obesity Rate","obesity",  function(d) {return d.obesity; }, function(d) { return x(d.obesity) });
   btnTrans("Premature Deaths per 100,000 People","death",  function(d) {return d.death; }, function(d) { return x(d.death) });
-  btnTrans("Pct. Children in Poverty","childpoverty",  function(d) {return d.childpoverty; }, function(d) { return x(d.childpoverty) });
-  btnTrans("Pct. with a Long Commute","longcommute",  function(d) {return d.longcommute; }, function(d) { return x(d.longcommute) });
-  btnTrans("Drug Overdose Deaths per xxx People","overdose",  function(d) {return d.overdose; }, function(d) { return x(d.overdose) });
+  btnTrans("Children in Poverty, Pct.","childpoverty",  function(d) {return d.childpoverty; }, function(d) { return x(d.childpoverty) });
+  btnTrans("People with a Commute Over 30 Minutes, Pct.","longcommute",  function(d) {return d.longcommute; }, function(d) { return x(d.longcommute) });
+  btnTrans("Drug Overdose Deaths per 100,000 People","overdose",  function(d) {return d.overdose; }, function(d) { return x(d.overdose) });
   btnTrans("Median Household Income ($)","income",  function(d) {return d.income; }, function(d) { return x(d.income) });
-  btnTrans("Pct. Non-Hispanic White","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
+  btnTrans("Non-Hispanic White Pct.","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
 
 
 });
