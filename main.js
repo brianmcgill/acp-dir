@@ -55,6 +55,21 @@ d3.csv("acpdata.csv", function(error, data) {
     d.nhwhite = +d.nhwhite;
   });
 
+  d3.csv("acpaverage.csv", function(error, avg) {
+
+    avg.forEach(function(d) {
+      d.type = +d.type;
+      d.typename = d.typename
+      d.obesity = +d.obesity
+      d.uninsured = +d.uninsured
+      d.death = +d.death
+      d.childpoverty = +d.childpoverty
+      d.longcommute = +d.longcommute
+      d.overdose = +d.overdose
+      d.income = +d.income
+      d.nhwhite = +d.nhwhite;
+    });
+
   x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
   y.domain(data.map(function(d) { return d.typename; }));
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
@@ -86,6 +101,14 @@ d3.csv("acpdata.csv", function(error, data) {
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
+  const rect = svg.selectAll('.blackrect')
+      .data(avg)
+      .enter().append("rect")
+
+      rect.attr('class', 'avgz')
+      .attr('x', function(d) { return x(d.uninsured)-1; })
+      .attr('y', function(d) { return y(d.typename)-10; })
+
   //button transitions
   function btnTrans(hed, cat, xMax, circ) {
 
@@ -108,6 +131,12 @@ d3.csv("acpdata.csv", function(error, data) {
         .ease(d3.easeElastic)
         .attr("cx", circ)   
 
+      rect.transition()
+        .duration(1300)
+        .delay(delay)
+        .ease(d3.easeElastic)
+        .attr("x", circ)   
+
     });   
   };
 
@@ -121,7 +150,7 @@ d3.csv("acpdata.csv", function(error, data) {
   btnTrans("Median Household Income ($)","income",  function(d) {return d.income; }, function(d) { return x(d.income) });
   btnTrans("Non-Hispanic White Pct.","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
 
-
+})
 });
 
 function resize() {
@@ -160,6 +189,10 @@ function resize() {
     .attr("r", 6)
     .attr("cx", function(d) { return x(d.uninsured); })
     .attr("cy", function(d) { return y(d.typename); })
+
+  svg.selectAll('.avgz')
+    .attr("x", function(d) { return x(d.uninsured)-1; })
+    .attr("y", function(d) { return y(d.typename)-10; })
 }
 
 d3.select(window).on('resize', resize);
