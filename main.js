@@ -37,7 +37,7 @@ var tip = d3.tip()
 
 svg.call(tip);
 
-d3.csv("acpdata.csv", function(error, data) {
+d3.csv("data/acpdata.csv", function(error, data) {
   if (error) throw error;
 
   //var subset = data.filter(function(el){return el.Metric === 'Cost'});
@@ -55,7 +55,7 @@ d3.csv("acpdata.csv", function(error, data) {
     d.nhwhite = +d.nhwhite;
   });
 
-  d3.csv("acpaverage.csv", function(error, avg) {
+  d3.csv("data/acpaverage.csv", function(error, avg) {
 
     avg.forEach(function(d) {
       d.type = +d.type;
