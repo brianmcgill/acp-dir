@@ -81,6 +81,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .append("option")
       .attr('value', function(d) {return d.fips; })
       .text(function(d) {return d.countyname + ', ' + d.state; })
+      .sort(function(a,b) {return d3.ascending(a.state, b.state) || d3.ascending(a.countyname, b.countyname); })
 
   //create axises
   x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
@@ -103,7 +104,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .enter().append("circle")
 
       circles.attr("class", "dot")
-      .attr("data-slug", function(d) { return d.fips  })
+      .attr("data-slug", function(d) { return d.fips  }) //to connect search box
       .attr("r", 6)
       .attr("cx", function(d) { return x(d.uninsured); })
       .attr("cy", function(d) { return y(d.typename); })
