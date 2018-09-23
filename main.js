@@ -129,7 +129,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
 
       d3.select(".hed").text(hed)
 
-      x.domain([0, d3.max(data, xMax)]); 
+      x.domain([d3.min(data, xMax), d3.max(data, xMax)]); 
       xAxis = d3.axisBottom(x)//.tickFormat(d3.format(".0%")); 
 
       svg.selectAll(".x.axis")
