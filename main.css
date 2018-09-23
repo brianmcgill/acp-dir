@@ -30,7 +30,7 @@ text { font-family: Montserrat !important; }
 }
 
 .dot {
-  stroke: null;
+  //stroke: null;
   opacity: 0.1;
 }
 
@@ -40,6 +40,12 @@ text { font-family: Montserrat !important; }
   stroke: #fff;
   stroke-width:0.5px;
   fill: #555;
+}
+
+.dot.selected {
+  stroke: #222 !important;
+  stroke-width: 1px !important;
+  opacity: 1 !important;
 }
 
 #chart {

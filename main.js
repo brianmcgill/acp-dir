@@ -43,7 +43,8 @@ d3.csv("data/acpdata.csv", function(error, data) {
   //var subset = data.filter(function(el){return el.Metric === 'Cost'});
 
   data.forEach(function(d) {
-    d.type = +d.type;
+    d.fips = +d.fips
+    d.type = +d.type
     d.typename = d.typename
     d.obesity = +d.obesity
     d.uninsured = +d.uninsured
@@ -70,6 +71,13 @@ d3.csv("data/acpdata.csv", function(error, data) {
       d.nhwhite = +d.nhwhite;
     });
 
+  //searchbox
+  d3.select('#combobox').selectAll('.option')
+      .data(data).enter()
+      .append("option")
+      .attr('value', function(d) {return d.fips; })
+      .text(function(d) {return d.countyname + ', ' + d.state; })
+
   x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
   y.domain(data.map(function(d) { return d.typename; }));
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
@@ -94,6 +102,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .enter().append("circle")
 
       circles.attr("class", "dot")
+      .attr("data-slug", function(d) { return d.fips  })
       .attr("r", 6)
       .attr("cx", function(d) { return x(d.uninsured); })
       .attr("cy", function(d) { return y(d.typename); })
@@ -149,6 +158,15 @@ d3.csv("data/acpdata.csv", function(error, data) {
   btnTrans("Drug Overdose Deaths per 100,000 People","overdose",  function(d) {return d.overdose; }, function(d) { return x(d.overdose) });
   btnTrans("Median Household Income ($)","income",  function(d) {return d.income; }, function(d) { return x(d.income) });
   btnTrans("Non-Hispanic White Pct.","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
+
+  //search
+  $('.combobox').combobox()
+
+  $('input[type="hidden"]').change(function(){
+    var ctySlug = $(this).val();
+    d3.selectAll('circle').classed("selected", false).style('stroke', null).style('opacity', 0.1);;
+    d3.selectAll('circle[data-slug="' + ctySlug + '"]').classed("selected", true).style('stroke', '#222').style('stroke-width', 2).style('opacity', 1);
+  });
 
 })
 });
