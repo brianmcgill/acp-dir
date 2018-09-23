@@ -82,6 +82,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .attr('value', function(d) {return d.fips; })
       .text(function(d) {return d.countyname + ', ' + d.state; })
 
+  //create axises
   x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
   y.domain(data.map(function(d) { return d.typename; }));
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
@@ -96,6 +97,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .attr("class", "y axis")
       .call(yAxis)
 
+  //create county circles
   const circles = svg.selectAll(".dot")
       .data(data)
       .enter().append("circle")
@@ -109,6 +111,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
+  //create average lines
   const rect = svg.selectAll('.blackrect')
       .data(avg)
       .enter().append("rect")
@@ -161,12 +164,12 @@ d3.csv("data/acpdata.csv", function(error, data) {
   //search
   $('.combobox').combobox()
 
+  //adds, removes searched circles
   function removeCircStyle() { 
     d3.selectAll('circle')
       .classed("selected", false)
       .style('stroke', null).style('opacity', 0.1);
   };
-
 
   $('input[type="hidden"]').change(function(){
     var ctySlug = $(this).val();
