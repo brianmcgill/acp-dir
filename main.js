@@ -151,12 +151,12 @@ d3.csv("data/acpdata.csv", function(error, data) {
   //call buttons
   btnTrans("Uninsured Rate", "uninsured", function(d) { return d.uninsured; }, function(d) { return x(d.uninsured) });
   btnTrans("Obesity Rate","obesity",  function(d) {return d.obesity; }, function(d) { return x(d.obesity) });
-  btnTrans("Premature Deaths per 100,000 People","death",  function(d) {return d.death; }, function(d) { return x(d.death) });
-  btnTrans("Children in Poverty, Pct.","childpoverty",  function(d) {return d.childpoverty; }, function(d) { return x(d.childpoverty) });
-  btnTrans("People with a Commute Over 30 Minutes, Pct.","longcommute",  function(d) {return d.longcommute; }, function(d) { return x(d.longcommute) });
+  btnTrans("Premature Deaths, pct","death",  function(d) {return d.death; }, function(d) { return x(d.death) });
+  btnTrans("Children in Poverty, pct.","childpoverty",  function(d) {return d.childpoverty; }, function(d) { return x(d.childpoverty) });
+  btnTrans("People with a Commute Over 30 Minutes, pct.","longcommute",  function(d) {return d.longcommute; }, function(d) { return x(d.longcommute) });
   btnTrans("Drug Overdose Deaths per 100,000 People","overdose",  function(d) {return d.overdose; }, function(d) { return x(d.overdose) });
-  btnTrans("Median Household Income ($)","income",  function(d) {return d.income; }, function(d) { return x(d.income) });
-  btnTrans("Non-Hispanic White Pct.","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
+  btnTrans("Median Household Income ($1,000)","income",  function(d) {return d.income; }, function(d) { return x(d.income) });
+  btnTrans("Non-Hispanic White pct.","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
 
   //search
   $('.combobox').combobox()
