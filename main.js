@@ -1,3 +1,7 @@
+function bringToFront(evt) {
+    var element = evt.target; //get node reference
+    element.parentNode.appendChild(element); //appendChild after the last child
+}  
 
 var margin = {top: 20, right: 30, bottom: 40, left: 130},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
@@ -71,7 +75,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       d.nhwhite = +d.nhwhite;
     });
 
-  //searchbox
+  //create search box
   d3.select('#combobox').selectAll('.option')
       .data(data).enter()
       .append("option")
@@ -86,12 +90,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
-      /*.append("text")
-      .attr("class", "label")
-      .attr("x", width)
-      .attr("y", -6)
-      .style("text-anchor", "end")
-      .text("Uninsured Percentage");*/
+
 
   svg.append("g")
       .attr("class", "y axis")
@@ -165,7 +164,13 @@ d3.csv("data/acpdata.csv", function(error, data) {
   $('input[type="hidden"]').change(function(){
     var ctySlug = $(this).val();
     d3.selectAll('circle').classed("selected", false).style('stroke', null).style('opacity', 0.1);;
-    d3.selectAll('circle[data-slug="' + ctySlug + '"]').classed("selected", true).style('stroke', '#222').style('stroke-width', 2).style('opacity', 1);
+    d3.selectAll('circle[data-slug="' + ctySlug + '"]')
+      .classed("selected", true)
+      .style('stroke', '#222').style('stroke-width', 2).style('opacity', 1)
+      .each(function(d,i) { 
+                     var evt = { target: this};
+                     bringToFront(evt);
+                  });;
   });
 
 })
