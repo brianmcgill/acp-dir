@@ -49,6 +49,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
   data.forEach(function(d) {
     d.fips = +d.fips
     d.type = +d.type
+    d.color = d.color
     d.typename = d.typename
     d.obesity = +d.obesity
     d.uninsured = +d.uninsured
@@ -108,7 +109,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .attr("r", 6)
       .attr("cx", function(d) { return x(d.uninsured); })
       .attr("cy", function(d) { return y(d.typename); })
-      .style("fill", function(d) {return color(d.type); })
+      .style("fill", function(d) {return '#' + d.color; })
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
