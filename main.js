@@ -161,9 +161,16 @@ d3.csv("data/acpdata.csv", function(error, data) {
   //search
   $('.combobox').combobox()
 
+  function removeCircStyle() { 
+    d3.selectAll('circle')
+      .classed("selected", false)
+      .style('stroke', null).style('opacity', 0.1);
+  };
+
+
   $('input[type="hidden"]').change(function(){
     var ctySlug = $(this).val();
-    d3.selectAll('circle').classed("selected", false).style('stroke', null).style('opacity', 0.1);;
+    removeCircStyle();
     d3.selectAll('circle[data-slug="' + ctySlug + '"]')
       .classed("selected", true)
       .style('stroke', '#222').style('stroke-width', 2).style('opacity', 1)
@@ -172,6 +179,8 @@ d3.csv("data/acpdata.csv", function(error, data) {
                      bringToFront(evt);
                   });;
   });
+
+  d3.select('.combobox-clear').on('click', removeCircStyle)
 
 })
 });

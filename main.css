@@ -42,10 +42,8 @@ text { font-family: Montserrat !important; }
   fill: #555;
 }
 
-.dot.selected {
-  stroke: #222 !important;
-  stroke-width: 1px !important;
-  opacity: 1 !important;
+.combobox {
+  font-family: Montserrat !important;
 }
 
 #chart {
