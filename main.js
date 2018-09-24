@@ -129,7 +129,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
 
       d3.select(".hed").text(hed)
 
-      x.domain([d3.min(data, xMax), d3.max(data, xMax)]); 
+      x.domain([d3.min(data, function(d) { return d[cat]; }), d3.max(data, function(d) { return d[cat]; })]); 
       xAxis = d3.axisBottom(x)//.tickFormat(d3.format(".0%")); 
 
       svg.selectAll(".x.axis")
@@ -142,26 +142,26 @@ d3.csv("data/acpdata.csv", function(error, data) {
         .duration(1300)
         .delay(delay)
         .ease(d3.easeElastic)
-        .attr("cx", circ)   
+        .attr("cx", function(d) { return x(d[cat]); }) 
 
       rect.transition()
         .duration(1300)
         .delay(delay)
         .ease(d3.easeElastic)
-        .attr("x", circ)   
+        .attr("x", function(d) { return x(d[cat]); })   
 
     });   
   };
 
   //call buttons
-  btnTrans("Uninsured Rate", "uninsured", function(d) { return d.uninsured; }, function(d) { return x(d.uninsured) });
-  btnTrans("Obesity Rate","obesity",  function(d) {return d.obesity; }, function(d) { return x(d.obesity) });
-  btnTrans("Premature Deaths, pct","death",  function(d) {return d.death; }, function(d) { return x(d.death) });
-  btnTrans("Children in Poverty, pct.","childpoverty",  function(d) {return d.childpoverty; }, function(d) { return x(d.childpoverty) });
-  btnTrans("People with a Commute Over 30 Minutes, pct.","longcommute",  function(d) {return d.longcommute; }, function(d) { return x(d.longcommute) });
-  btnTrans("Drug Overdose Deaths per 100,000 People","overdose",  function(d) {return d.overdose; }, function(d) { return x(d.overdose) });
-  btnTrans("Median Household Income ($1,000)","income",  function(d) {return d.income; }, function(d) { return x(d.income) });
-  btnTrans("Non-Hispanic White pct.","nhwhite",  function(d) {return d.nhwhite; }, function(d) { return x(d.nhwhite) });
+  btnTrans("Uninsured Rate", "uninsured");
+  btnTrans("Obesity Rate","obesity");
+  btnTrans("Premature Deaths, pct","death");
+  btnTrans("Children in Poverty, pct.","childpoverty");
+  btnTrans("People with a Commute Over 30 Minutes, pct.","longcommute");
+  btnTrans("Drug Overdose Deaths per 100,000 People","overdose");
+  btnTrans("Median Household Income ($1,000)","income");
+  btnTrans("Non-Hispanic White pct.","nhwhite");
 
   //search
   $('.combobox').combobox()
