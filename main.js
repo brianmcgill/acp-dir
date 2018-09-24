@@ -123,7 +123,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .attr('y', function(d) { return y(d.typename)-10; })
 
   //button transitions
-  function btnTrans(hed, cat, xMax, circ) {
+  function btnTrans(hed, cat) {
 
     d3.select("#" + cat + "-btn").on("click",function(e) {
 
