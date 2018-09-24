@@ -29,15 +29,16 @@ var svg = d3.select("#chart")
 
 //http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js
 function pctDecimal(num) {
-  return Math.round(num *1000)/10 +"%"
+  return Math.round(num *10)/10 //+"%"
 }
 
 var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<div><span style='color:white'>" + d.countyname + ", " + d.state + "</span></div>";
-   })
+        return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
+        "<span style='font-size:12px; line-height:1.4;'>" + 'Uninsured Rate: ' + pctDecimal(d.uninsured) + '</span>' ;
+      })
 
 svg.call(tip);
 
@@ -132,23 +133,31 @@ d3.csv("data/acpdata.csv", function(error, data) {
       x.domain([d3.min(data, function(d) { return d[cat]; }), d3.max(data, function(d) { return d[cat]; })]); 
       xAxis = d3.axisBottom(x)//.tickFormat(d3.format(".0%")); 
 
+      const delay = function(d, i) { return i * 0.2; };
+      const duration = 1300;
+
       svg.selectAll(".x.axis")
         .transition()
-        .duration(1300)
+        .duration(duration)
         .call(xAxis);
 
-      const delay = function(d, i) { return i * 0.2; };
       circles.transition()
-        .duration(1300)
+        .duration(duration)
         .delay(delay)
         .ease(d3.easeElastic)
         .attr("cx", function(d) { return x(d[cat]); }) 
 
       rect.transition()
-        .duration(1300)
+        .duration(duration)
         .delay(delay)
         .ease(d3.easeElastic)
         .attr("x", function(d) { return x(d[cat]); })   
+
+      tip.html(function(d) {
+        return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
+        "<span style='font-size:12px; line-height:1.4;'>" + hed + ': ' + pctDecimal(d[cat]) + '</span>' ;
+      })
+
 
     });   
   };
