@@ -168,7 +168,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
   btnTrans("Obesity Rate","obesity");
   btnTrans("Premature Deaths, pct","death");
   btnTrans("Children in Poverty, pct.","childpoverty");
-  btnTrans("People with a Commute Over 30 Minutes, pct.","longcommute");
+  btnTrans("Commute Over 30 Minutes, pct.","longcommute");
   btnTrans("Drug Overdose Deaths per 100,000 People","overdose");
   btnTrans("Median Household Income ($1,000)","income");
   btnTrans("Non-Hispanic White pct.","nhwhite");
