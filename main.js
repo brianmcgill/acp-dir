@@ -145,7 +145,8 @@ d3.csv("data/acpdata.csv", function(error, data) {
         .duration(duration)
         .delay(delay)
         .ease(d3.easeElastic)
-        .attr("cx", function(d) { return x(d[cat]); }) 
+        .attr("cx", function(d) { return x(d[cat]); })
+        .style('opacity', function(d){ if (d[cat] == 0) { return 0; } else { return 0.1; } }) 
 
       rect.transition()
         .duration(duration)
