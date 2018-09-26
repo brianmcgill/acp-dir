@@ -6,7 +6,7 @@ function bringToFront(evt) {
 var margin = {top: 20, right: 30, bottom: 40, left: 130},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
     width = dim - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = 550 - margin.top - margin.bottom;
 
 var x = d3.scaleLinear().rangeRound([0, width]);
 
@@ -204,7 +204,7 @@ function resize() {
 
   var dim = Math.min(parseInt(d3.select("#chart").style("width"))),
   width = dim - margin.left - margin.right,
-  height = 600 - margin.top - margin.bottom;
+  height = 550 - margin.top - margin.bottom;
 
   console.log(dim);
 
