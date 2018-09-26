@@ -57,9 +57,13 @@ d3.csv("data/acpdata.csv", function(error, data) {
     d.death = +d.death
     d.childpoverty = +d.childpoverty
     d.longcommute = +d.longcommute
-    d.overdose = +d.overdose
+    d.college = +d.college
     d.income = +d.income
-    d.nhwhite = +d.nhwhite;
+    d.nhwhite = +d.nhwhite
+    d.mental = +d.mental
+    d.foodinsecure = +d.foodinsecure
+    d.healthfood = +d.healthfood
+    d.singleparent = +d.singleparent;
   });
 
   d3.csv("data/acpaverage.csv", function(error, avg) {
@@ -72,9 +76,13 @@ d3.csv("data/acpdata.csv", function(error, data) {
       d.death = +d.death
       d.childpoverty = +d.childpoverty
       d.longcommute = +d.longcommute
-      d.overdose = +d.overdose
+      d.college = +d.college
       d.income = +d.income
-      d.nhwhite = +d.nhwhite;
+      d.nhwhite = +d.nhwhite
+      d.mental = +d.mental
+      d.foodinsecure = +d.foodinsecure
+      d.healthfood = +d.healthfood
+      d.singleparent = +d.singleparent;
     });
 
   //create search box
@@ -169,9 +177,13 @@ d3.csv("data/acpdata.csv", function(error, data) {
   btnTrans("Premature Deaths, pct","death");
   btnTrans("Children in Poverty, pct.","childpoverty");
   btnTrans("Commute Over 30 Minutes, pct.","longcommute");
-  btnTrans("Drug Overdose Deaths per 100,000 People","overdose");
+  btnTrans("Children in Single Parent Homes, pct","singleparent");
   btnTrans("Median Household Income ($1,000)","income");
+  btnTrans("People with Some College, pct.","college");
   btnTrans("Non-Hispanic White pct.","nhwhite");
+  btnTrans("Has Frequent Mental Distress, pct","mental");
+  btnTrans("Food Insecurity, pct.","foodinsecure");
+  btnTrans("Limit Access to Healthy Food, pct.","healthfood");
 
   //search
   $('.combobox').combobox()
