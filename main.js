@@ -146,7 +146,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
         .delay(delay)
         .ease(d3.easeElastic)
         .attr("cx", function(d) { return x(d[cat]); })
-        .style('opacity', function(d){ if (d[cat] == 0) { return 0; } else { return 0.1; } }) 
+        .style('visibility', function(d){ if (d[cat] == 0) { return 'hidden'; } else { return 'visible'; } }) 
 
       rect.transition()
         .duration(duration)
