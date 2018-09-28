@@ -3,7 +3,7 @@ function bringToFront(evt) {
     element.parentNode.appendChild(element); //appendChild after the last child
 }  
 
-var margin = {top: 20, right: 30, bottom: 40, left: 150},
+var margin = {top: 20, right: 30, bottom: 40, left: 165},
     dim = Math.min(parseInt(d3.select("#chart").style("width")), parseInt(d3.select("#chart").style("height"))),
     width = dim - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
