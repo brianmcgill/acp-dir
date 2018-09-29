@@ -17,7 +17,13 @@ var y = d3.scaleBand().rangeRound([height, 0]);
 var color = d3.scaleOrdinal()
       .range(['#699246','#C43B82','#7A3842','#3A2C70','#C44244','#3A9C9B','#EACD3F','#1F8FBA','#F08031','#ABBF48','#86563E','#82477F','#457A59','#2E547A','#FCB93A']);
 
-var xAxis = d3.axisBottom(x)//.tickFormat(function(d) { return d3.format(",.0f")(d) + "%"; });
+var xAxis = d3.axisBottom(x).ticks(5)
+      .tickFormat(function(d, i) {
+        if (i == 0) {
+            return d + '%';
+        }
+        return d;
+      });
 
 var yAxis = d3.axisLeft(y);
 
@@ -27,11 +33,14 @@ var svg = d3.select("#chart")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js
 function pctDecimal(num) {
   return Math.round(num *10)/10 //+"%"
 }
 
+const addCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+//http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js
 var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
@@ -141,16 +150,14 @@ d3.csv("data/acpdata.csv", function(error, data) {
       d3.select(".hed").text(hed)
 
       x.domain([d3.min(data, function(d) { return d[cat]; }), d3.max(data, function(d) { return d[cat]; })]); 
-      xAxis = d3.axisBottom(x)
-
-      /*xAxis = d3.axisBottom(x).tickFormat( 
-        function(d) { 
-          if (cat == 'income') { 
-             return "$" + d3.format(",.0f")(d) + 'k';  
-          } else { 
-            return d3.format(",.0f")(d) + "%"; 
-          } 
-        });  */
+      xAxis = d3.axisBottom(x).ticks(5).tickFormat(function(d, i) {
+        if(i == 0 && cat == 'income') {
+            return '$' + d + 'k';
+        } else if (i == 0) {
+            return d + '%';
+        }
+        return d;
+      });
 
       const delay = function(d, i) { return i * 0.2; };
       const duration = 1300;
@@ -174,8 +181,13 @@ d3.csv("data/acpdata.csv", function(error, data) {
         .attr("x", function(d) { return x(d[cat]); })   
 
       tip.html(function(d) {
-        return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
-        "<span style='font-size:12px; line-height:1.4;'>" + hed + ': ' + pctDecimal(d[cat]) + '</span>' ;
+        if (cat == 'income') { 
+           return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
+          "<span style='font-size:12px; line-height:1.4;'>" + 'Median HH Income: $' + addCommas(d.income*1000) + '</span>' ;
+        } else {
+          return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
+          "<span style='font-size:12px; line-height:1.4;'>" + hed + ': ' + pctDecimal(d[cat]) + '%</span>' ;
+        }
       })
 
       
@@ -203,7 +215,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
   function removeCircStyle() { 
     d3.selectAll('circle')
       .classed("selected", false)
-      .style('stroke', null).style('opacity', 0.1);
+      .style('stroke', null).style('opacity', 0.15);
   };
 
   $('input[type="hidden"]').change(function(){
