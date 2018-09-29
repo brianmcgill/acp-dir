@@ -46,7 +46,7 @@ var tip = d3.tip()
     .offset([-10, 0])
     .html(function(d) {
         return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
-        "<span style='font-size:12px; line-height:1.4;'>" + 'Uninsured Rate: ' + pctDecimal(d.uninsured) + '</span>' ;
+        "<span style='font-size:12px; line-height:1.4;'>" + 'Uninsured Rate: ' + pctDecimal(d.uninsured) + '%</span>' ;
       })
 
 svg.call(tip);
