@@ -197,16 +197,16 @@ d3.csv("data/acpdata.csv", function(error, data) {
   //call buttons
   btnTrans("Uninsured Rate", "uninsured");
   btnTrans("Obesity Rate","obesity");
-  btnTrans("Premature Deaths %","death");
-  btnTrans("Children in Poverty %.","childpoverty");
-  btnTrans("Commute Over 30 Minutes %.","longcommute");
-  btnTrans("Children in Single-Parent Homes %","singleparent");
-  btnTrans("Median Household Income ($1,000)","income");
-  btnTrans("People with Some College %","college");
-  btnTrans("Non-Hispanic White %","nhwhite");
-  btnTrans("Has Frequent Mental Distress %","mental");
-  btnTrans("Food Insecurity %","foodinsecure");
-  btnTrans("Limited Access to Healthy Food %","healthfood");
+  btnTrans("Premature Deaths","death");
+  btnTrans("Children in Poverty","childpoverty");
+  btnTrans("Commute Over 30 Minutes","longcommute");
+  btnTrans("Children in Single-Parent Homes","singleparent");
+  btnTrans("Median Household Income","income");
+  btnTrans("People with Some College","college");
+  btnTrans("Non-Hispanic White","nhwhite");
+  btnTrans("Has Frequent Mental Distress","mental");
+  btnTrans("Food Insecurity","foodinsecure");
+  btnTrans("Limited Access to Healthy Food","healthfood");
 
   //search
   $('.combobox').combobox()
