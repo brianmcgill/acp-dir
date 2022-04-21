@@ -20,9 +20,9 @@ var color = d3.scaleOrdinal()
 var xAxis = d3.axisBottom(x).ticks(5)
       .tickFormat(function(d, i) {
         if (i == 0) {
-            return d + '%';
+            return d + 'k';
         }
-        return d;
+        return d + 'k';
       });
 
 var yAxis = d3.axisLeft(y);
@@ -46,7 +46,7 @@ var tip = d3.tip()
     .offset([-10, 0])
     .html(function(d) {
         return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
-        "<span style='font-size:12px; line-height:1.4;'>" + 'Uninsured Rate: ' + pctDecimal(d.uninsured) + '%</span>' ;
+        "<span style='font-size:12px; line-height:1.4;'>" + 'DIR per capita: $' +  addCommas(d.dirz*1000) + '</span>' ;
       })
 
 svg.call(tip);
@@ -61,6 +61,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
     d.type = +d.type
     d.color = d.color
     d.typename = d.typename
+    d.dirz = +d.dirz
     d.obesity = +d.obesity
     d.uninsured = +d.uninsured
     d.death = +d.death
@@ -82,6 +83,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       d.typename = d.typename
       d.obesity = +d.obesity
       d.uninsured = +d.uninsured
+      d.dirz = +d.dirz
       d.death = +d.death
       d.childpoverty = +d.childpoverty
       d.longcommute = +d.longcommute
@@ -103,7 +105,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .sort(function(a,b) {return d3.ascending(a.state, b.state) || d3.ascending(a.countyname, b.countyname); })
 
   //create axises
-  x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
+  x.domain([0, d3.max(data, function(d) { return d.dirz; })]);
   y.domain(data.map(function(d) { return d.typename; }));
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
 
@@ -125,7 +127,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       circles.attr("class", "dot")
       .attr("data-slug", function(d) { return d.fips  }) //to connect search box
       .attr("r", 6)
-      .attr("cx", function(d) { return x(d.uninsured); })
+      .attr("cx", function(d) { return x(d.dirz); })
       .attr("cy", function(d) { return y(d.typename); })
       .style("fill", function(d) {return '#' + d.color; })
       .on('mouseover', tip.show)
@@ -137,7 +139,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .enter().append("rect")
 
       rect.attr('class', 'avgz')
-      .attr('x', function(d) { return x(d.uninsured)-1; })
+      .attr('x', function(d) { return x(d.dirz)-1; })
       .attr('y', function(d) { return y(d.typename)-10; })
       .attr('height', '20px')
       .attr('width', '4px')
@@ -183,9 +185,9 @@ d3.csv("data/acpdata.csv", function(error, data) {
         .attr("x", function(d) { return x(d[cat]); })   
 
       tip.html(function(d) {
-        if (cat == 'income') { 
+        if (cat == 'income' || cat == 'dirz') { 
            return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
-          "<span style='font-size:12px; line-height:1.4;'>" + 'Median HH Income: $' + addCommas(d.income*1000) + '</span>' ;
+          "<span style='font-size:12px; line-height:1.4;'>" + 'DIR per capita $' + addCommas(d.income*1000) + '</span>' ;
         } else if (cat == 'death') {
           return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
           "<span style='font-size:12px; line-height:1.4;'>"  + addCommas(pctDecimal(d.death*1000)) + ' years of potential life lost per 100k people</span>' ;
@@ -248,7 +250,7 @@ function resize() {
 
   console.log(dim);
 
-  x.domain([0, d3.max(data, function(d) { return d.uninsured; })]);
+  x.domain([0, d3.max(data, function(d) { return d.dirz; })]);
  
 
   // Update the range of the scale with new width/height
@@ -270,7 +272,7 @@ function resize() {
   xAxis.ticks(dim / 75);
   yAxis.ticks(dim / 75);
 
-  d3.select(".hed").text("Uninsured Rate")
+  d3.select(".hed").text("Dividends, Interest and Rent per capita")
 
   // Update the circles
   //r.range([dim / 90, dim / 35])
