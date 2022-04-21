@@ -20,7 +20,7 @@ var color = d3.scaleOrdinal()
 var xAxis = d3.axisBottom(x).ticks(5)
       .tickFormat(function(d, i) {
         if (i == 0) {
-            return d + 'k';
+            return '$' + d + 'k';
         }
         return d + 'k';
       });
@@ -62,7 +62,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
     d.color = d.color
     d.typename = d.typename
     d.dirz = +d.dirz
-    d.obesity = +d.obesity
+   /* d.obesity = +d.obesity
     d.uninsured = +d.uninsured
     d.death = +d.death
     d.childpoverty = +d.childpoverty
@@ -73,7 +73,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
     d.mental = +d.mental
     d.foodinsecure = +d.foodinsecure
     d.healthfood = +d.healthfood
-    d.singleparent = +d.singleparent;
+    d.singleparent = +d.singleparent */;
   });
 
   d3.csv("data/acpaverage.csv", function(error, avg) {
@@ -82,8 +82,8 @@ d3.csv("data/acpdata.csv", function(error, data) {
       d.type = +d.type
       d.typename = d.typename
       d.obesity = +d.obesity
-      d.uninsured = +d.uninsured
       d.dirz = +d.dirz
+     /* d.uninsured = +d.uninsured
       d.death = +d.death
       d.childpoverty = +d.childpoverty
       d.longcommute = +d.longcommute
@@ -93,7 +93,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       d.mental = +d.mental
       d.foodinsecure = +d.foodinsecure
       d.healthfood = +d.healthfood
-      d.singleparent = +d.singleparent;
+      d.singleparent = +d.singleparent */;
     });
 
   //create search box
@@ -105,7 +105,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .sort(function(a,b) {return d3.ascending(a.state, b.state) || d3.ascending(a.countyname, b.countyname); })
 
   //create axises
-  x.domain([0, d3.max(data, function(d) { return d.dirz; })]);
+  x.domain([0, 80]); //d3.max(data, function(d) { return d.dirz; })
   y.domain(data.map(function(d) { return d.typename; }));
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
 
@@ -145,7 +145,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .attr('width', '4px')
 
   //button transitions
-  function btnTrans(hed, cat) {
+  /*function btnTrans(hed, cat) {
 
     d3.select("#" + cat + "-btn").on("click",function(e) {
 
@@ -153,7 +153,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
 
       x.domain([d3.min(data, function(d) { return d[cat]; }), d3.max(data, function(d) { return d[cat]; })]); 
       xAxis = d3.axisBottom(x).ticks(5).tickFormat(function(d, i) {
-        if(i == 0 && cat == 'income') {
+        if(i == 0 && cat == 'dirz') {
             return '$' + d + 'k';
         } else if (i == 0 && cat == 'death') {
             return d + 'k';
@@ -213,7 +213,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
   btnTrans("Non-Hispanic White","nhwhite");
   btnTrans("Has Frequent Mental Distress","mental");
   btnTrans("Food Insecurity","foodinsecure");
-  btnTrans("Limited Access to Healthy Food","healthfood");
+  btnTrans("Limited Access to Healthy Food","healthfood"); */
 
   //search
   $('.combobox').combobox()
@@ -279,11 +279,11 @@ function resize() {
 
   svg.selectAll('.dot')
     .attr("r", 6)
-    .attr("cx", function(d) { return x(d.uninsured); })
+    .attr("cx", function(d) { return x(d.dirz); })
     .attr("cy", function(d) { return y(d.typename); })
 
   svg.selectAll('.avgz')
-    .attr("x", function(d) { return x(d.uninsured)-1; })
+    .attr("x", function(d) { return x(d.dirz)-1; })
     .attr("y", function(d) { return y(d.typename)-10; })
 }
 
