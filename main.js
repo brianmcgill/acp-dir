@@ -46,7 +46,7 @@ var tip = d3.tip()
     .offset([-10, 0])
     .html(function(d) {
         return "<div><strong style='color: #fff; line-height:1.4;'>" + d.countyname + ", " + d.state + "</strong></div>" + 
-        "<span style='font-size:12px; line-height:1.4;'>" + 'DIR per capita: $' +  addCommas(d.dirz*1000) + '</span>' ;
+        "<span style='font-size:12px; line-height:1.4;'>" + 'DIR per capita: $' +  addCommas(Math.round(d.dirz*1000)) + '</span>' ;
       })
 
 svg.call(tip);
@@ -105,7 +105,7 @@ d3.csv("data/acpdata.csv", function(error, data) {
       .sort(function(a,b) {return d3.ascending(a.state, b.state) || d3.ascending(a.countyname, b.countyname); })
 
   //create axises
-  x.domain([0, 80]); //d3.max(data, function(d) { return d.dirz; })
+  x.domain([0, 70]); //d3.max(data, function(d) { return d.dirz; })
   y.domain(data.map(function(d) { return d.typename; }));
   //r.domain(d3.extent (subset, function (d)  {return d.TotalValue;}));
 
